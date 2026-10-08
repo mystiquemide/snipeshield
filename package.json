@@ -18,9 +18,17 @@
   },
   "homepage": "https://github.com/mystiquemide/tape-out-#readme",
   "devDependencies": {
-    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.1.2",
+    "@nomicfoundation/hardhat-ethers": "^3.1.3",
+    "@nomicfoundation/hardhat-network-helpers": "^1.1.2",
+    "@nomicfoundation/hardhat-verify": "^2.1.3",
+    "chai": "^4.5.0",
     "dotenv": "^18.0.6",
     "ethers": "^6.17.0",
-    "hardhat": "^2.22.17"
+    "hardhat": "^2.22.17",
+    "mocha": "^12.0.3"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^5.1.0"
   }
 }
