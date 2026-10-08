@@ -182,6 +182,24 @@ describe("SnipeShield on forked X Layer", function () {
     expect(await t.okbReserve()).to.equal(value - value / 100n);
   });
 
+  it("records every trade, the snipe penalty and volume on chain", async () => {
+    const t = await launch();
+    await (await t.connect(sniper).buy(0, { value: ethers.parseEther("0.01") })).wait();
+    await mine(10);
+    await (await t.connect(alice).buy(0, { value: ethers.parseEther("0.001") })).wait();
+    expect(await t.tradeCount()).to.equal(2n);
+    const rows = await t.tradesSlice(0, 10);
+    expect(rows.length).to.equal(2);
+    expect(rows[0].trader).to.equal(sniper.address);
+    expect(rows[0].tier).to.equal(6n);
+    expect(rows[1].tier).to.equal(0n);
+    // 20% charged on 0.01, creator keeps 1%, 19% stays in the curve
+    expect(await t.penaltyKept()).to.equal((ethers.parseEther("0.01") * 1900n) / 10000n);
+    expect(await t.volumeOkb()).to.equal(ethers.parseEther("0.011"));
+    expect((await t.tradesSlice(5, 10)).length).to.equal(0);
+    expect(await t.spotPrice()).to.be.gt(0n);
+  });
+
   it("tax never exceeds 25% for any tier", async () => {
     const t = await launch();
     for (let i = 0; i < 8; i++) expect(await t.taxTable(i)).to.be.lte(2500n);

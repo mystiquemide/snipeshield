@@ -30,6 +30,26 @@ contract ShieldToken is ERC20, ReentrancyGuard {
     uint256 public okbReserve; // real OKB backing the curve
     uint256 public taxOwed; // creator share, capped at the base rate
 
+    /// @notice Total OKB charged above the base rate and kept in the curve (the snipe penalty).
+    uint256 public penaltyKept;
+    /// @notice Total OKB that went into buys (gross) plus OKB paid out on sells (net).
+    uint256 public volumeOkb;
+
+    struct TradeRecord {
+        address trader;
+        uint40 blockNumber;
+        uint40 timestamp;
+        bool isBuy;
+        uint8 inputs;
+        uint8 tier;
+        uint16 taxBps;
+        uint128 okbAmount;
+        uint128 tokenAmount;
+    }
+
+    /// @dev Full trade history kept on chain so clients don't depend on log-range limits of public RPCs.
+    TradeRecord[] internal _trades;
+
     mapping(address => uint256) public lastTradeBlock;
     mapping(uint256 => uint256) public tradesInBlock;
 
@@ -172,7 +192,9 @@ contract ShieldToken is ERC20, ReentrancyGuard {
         // so a creator sniping their own launch pays the penalty like anyone else.
         okbReserve += msg.value - creatorCut;
         taxOwed += creatorCut;
-        _record(msg.sender);
+        penaltyKept += taxOkb - creatorCut;
+        volumeOkb += msg.value;
+        _record(msg.sender, true, bits, tier, bps, msg.value, tokensOut);
         _transfer(address(this), msg.sender, tokensOut);
         emit Trade(msg.sender, true, msg.value, tokensOut, bits, tier, bps, taxOkb);
     }
@@ -188,7 +210,9 @@ contract ShieldToken is ERC20, ReentrancyGuard {
 
         okbReserve -= okbOut + creatorCut;
         taxOwed += creatorCut;
-        _record(msg.sender);
+        penaltyKept += taxOkb - creatorCut;
+        volumeOkb += okbOut;
+        _record(msg.sender, false, bits, tier, bps, okbOut, tokensIn);
         _transfer(msg.sender, address(this), tokensIn);
         emit Trade(msg.sender, false, okbOut, tokensIn, bits, tier, bps, taxOkb);
 
@@ -196,9 +220,54 @@ contract ShieldToken is ERC20, ReentrancyGuard {
         require(ok, "send failed");
     }
 
-    function _record(address trader) internal {
+    function _record(
+        address trader,
+        bool isBuy,
+        uint8 bits,
+        uint8 tier,
+        uint256 bps,
+        uint256 okbAmount,
+        uint256 tokenAmount
+    ) internal {
         lastTradeBlock[trader] = block.number;
         tradesInBlock[block.number] += 1;
+        _trades.push(
+            TradeRecord({
+                trader: trader,
+                blockNumber: uint40(block.number),
+                timestamp: uint40(block.timestamp),
+                isBuy: isBuy,
+                inputs: bits,
+                tier: tier,
+                taxBps: uint16(bps),
+                okbAmount: uint128(okbAmount),
+                tokenAmount: uint128(tokenAmount)
+            })
+        );
+    }
+
+    // ------------------------------------------------------------------ views for clients
+
+    function tradeCount() external view returns (uint256) {
+        return _trades.length;
+    }
+
+    /// @notice Returns up to `count` trades starting at index `start` (oldest first).
+    function tradesSlice(uint256 start, uint256 count) external view returns (TradeRecord[] memory out) {
+        uint256 len = _trades.length;
+        if (start >= len) return new TradeRecord[](0);
+        uint256 end = start + count > len ? len : start + count;
+        out = new TradeRecord[](end - start);
+        for (uint256 i = start; i < end; i++) out[i - start] = _trades[i];
+    }
+
+    /// @notice Spot price in OKB wei per whole token (1e18 units), before tax.
+    function spotPrice() external view returns (uint256) {
+        return (_curveOkb() * 1 ether) / _curveTokens();
+    }
+
+    function windowEndBlock() external view returns (uint256) {
+        return launchBlock + WINDOW_BLOCKS;
     }
 
     function withdrawTax() external nonReentrant {
