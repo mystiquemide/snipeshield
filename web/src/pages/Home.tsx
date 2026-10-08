@@ -4,6 +4,7 @@ import { Layout, RpcError } from "../components/Layout";
 import { CONFIG, isDeployed } from "../lib/config";
 import { TAX_TABLE, fmtOkb, fmtPrice, pct, remaining, tierTone } from "../lib/chain";
 import { useBlock, useLaunches, type Launch } from "../lib/hooks";
+import { BuiltOn } from "../components/BuiltOn";
 
 const TIER_ROWS = [
   "Normal trade, or any trade after the 30 minute window",
@@ -122,6 +123,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <BuiltOn />
 
       {/* Live stats */}
       <section className="wrap pt-12">
