@@ -4,6 +4,19 @@
 
 Fair token launches on X Layer. Bots that buy in the first seconds pay up to 25%, everyone else pays 1%, and nobody can raise it, not even the creator. The tax rule is a public NAND circuit taped out on [TapeOut](https://www.tapeout.net).
 
+## On X Layer mainnet
+
+| Contract | Address |
+|---|---|
+| SHIELD processor (TapeOut Circuits) | [0x1EB66F2b96F8E861b20B2F93b66c99F0ea86276E](https://www.oklink.com/xlayer/address/0x1EB66F2b96F8E861b20B2F93b66c99F0ea86276E) |
+| SHIELD transistors (ERC-1155) | [0x6733a381b6120d9cB73E1b9B03198DD1407edb33](https://www.oklink.com/xlayer/address/0x6733a381b6120d9cB73E1b9B03198DD1407edb33) |
+| ShieldLauncher (verified) | [0x213149A7120F2d417DB5626607257b72687bf812](https://www.oklink.com/xlayer/address/0x213149A7120F2d417DB5626607257b72687bf812) |
+| Default policy | Circuit #1, taped out in [0x290d6858…6709](https://www.oklink.com/xlayer/tx/0x290d685887917b3fb3be3e6c5832a5cc0ec8d6223c99191228c2fab12aae6709) |
+| Deployer | [0x76C8B3A5ebCD1622cD232fd39F0B3e91DBDf990D](https://www.oklink.com/xlayer/address/0x76C8B3A5ebCD1622cD232fd39F0B3e91DBDf990D) |
+| TapeOut factory | [0x1f09daefa827f02cbb40967cc91b259763760761](https://www.oklink.com/xlayer/address/0x1f09daefa827f02cbb40967cc91b259763760761) |
+
+**SHIELD transistors:** fixed supply of 1,000,000, priced at 0.00001 OKB each, with no extra cap beyond the supply. The price is low because the processor exists to host policies: anyone can mint transistors and tape out their own launch policy on it.
+
 ## The problem
 
 New launches get sniped in their first blocks. The usual defense is a high launch tax, but an adjustable tax is also the classic rug: the creator raises the sell tax and buyers are trapped. A buyer can't tell a protective tax from a predatory one.

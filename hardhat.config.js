@@ -11,6 +11,18 @@ module.exports = {
     version: "0.8.24",
     settings: { optimizer: { enabled: true, runs: 200 }, evmVersion: "shanghai" },
   },
+  sourcify: { enabled: true },
+  etherscan: {
+    apiKey: { xlayer: process.env.OKLINK_API_KEY || "oklink" },
+    customChains: [{
+      network: "xlayer",
+      chainId: 196,
+      urls: {
+        apiURL: "https://www.oklink.com/api/v5/explorer/contract/verify-source-code-plugin/XLAYER",
+        browserURL: "https://www.oklink.com/xlayer",
+      },
+    }],
+  },
   networks: {
     hardhat: {
       chainId: 196,
