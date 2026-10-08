@@ -59,7 +59,7 @@ SnipeShield uses TapeOut as runtime logic. Every trade in the window calls `eval
 | `tapeout(netlist)` | The default policy is compiled from `policy/default.js` and taped out byte for byte |
 | `eval(circuitId, input)` | Called on every trade during the protection window |
 | `circuitInfo`, `isCPU` | The launcher rejects any circuit that isn't a stateless 6-in, 3-out policy on a registered TapeOut processor |
-| `netlist(circuitId)` | The app and CLI read the gates and verify them against the source |
+| `netlist(circuitId)` | The app reads the gates and shows them next to the truth table |
 
 ## Live on X Layer mainnet
 
@@ -98,7 +98,7 @@ These two are team test trades from a wallet we funded ([0xCd81…C8D5](https://
 - **Slippage protection.** `buy(minOut)` and `sell(amount, minOut)` revert if the price moves. The app sets 3%.
 - **No reentrancy.** Every OKB-moving function is guarded, and payouts happen after state updates.
 - **Pull-based earnings.** The creator withdraws their 1% with `withdrawTax()`.
-- **Trade history on chain.** Trades, volume and the penalty kept are stored on chain. Public X Layer RPCs cap log queries at 100 blocks, so the app and CLI read contract state, not logs.
+- **Trade history on chain.** Trades, volume and the penalty kept are stored on chain. Public X Layer RPCs cap log queries at 100 blocks, so the app reads contract state, not logs.
 
 ## The app
 
@@ -108,29 +108,6 @@ These two are team test trades from a wallet we funded ([0xCd81…C8D5](https://
 - **Launches.** Lists every shielded token with its window status, price and trades.
 
 ![Home](assets/home.jpg)
-
-## For agents and scripts
-
-Agents can quote the exact tax before trading. Quotes are free view calls.
-
-- [`/agent.json`](https://snipeshield.midelabs.xyz/agent.json) lists the contracts, the quote and trade functions, the signal bits and the tax table.
-- The `snipeshield` CLI is read only and prints JSON with `--json`:
-
-```bash
-npm install
-npm run cli -- quote 0xdC1F779B4024ff30C71BEB1D2C3913795946D712 0.01 --trader 0xYourAddress --json
-npm run cli -- token inspect 0xdC1F779B4024ff30C71BEB1D2C3913795946D712
-npm run cli -- launches
-```
-
-`npm run qa` checks the whole deployment against mainnet and the live site:
-- TapeOut registration and issuance terms
-- launcher wiring and the cap on every launch
-- the netlist bytes against `policy/default.js`
-- all 64 truth-table rows
-- site routes, built-in addresses and security headers
-
-It writes `artifacts/qa/summary.json`, `summary.md` and `junit.xml`, and exits non-zero on any failure.
 
 ## Limits
 
@@ -145,7 +122,6 @@ It writes `artifacts/qa/summary.json`, `summary.md` and `junit.xml`, and exits n
 contracts/   ShieldToken (curve, circuit-driven tax), ShieldLauncher, TapeOut interfaces
 policy/      NAND netlist compiler and the default policy, checked against a reference on all 64 inputs
 test/        Hardhat tests on a fork of X Layer mainnet against the real TapeOut factory
-cli/         snipeshield: read-only QA, inspection and quotes
 scripts/     deploy, genesis launch, sweep, web export
 web/         Vite + React app
 ```
@@ -155,7 +131,6 @@ web/         Vite + React app
 ```bash
 npm install
 npx hardhat test          # 16 tests on a fork of X Layer mainnet
-npm run qa                # live deployment and site checks
 
 cd web && npm install && npm run dev
 ```

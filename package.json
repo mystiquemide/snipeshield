@@ -4,10 +4,7 @@
   "description": "Fair token launches on X Layer, with the launch tax set by a public TapeOut circuit.",
   "main": "index.js",
   "scripts": {
-    "test": "hardhat test",
-    "cli": "node cli/snipeshield.js",
-    "qa": "node cli/snipeshield.js qa",
-    "health": "node cli/snipeshield.js health"
+    "test": "hardhat test"
   },
   "repository": {
     "type": "git",
@@ -33,8 +30,5 @@
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.1.0"
-  },
-  "bin": {
-    "snipeshield": "cli/snipeshield.js"
   }
 }

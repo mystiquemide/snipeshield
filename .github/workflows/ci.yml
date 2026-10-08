@@ -44,23 +44,3 @@ jobs:
         run: npm run lint
       - name: Typecheck and build
         run: npm run build
-
-  live:
-    name: Live deployment QA
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - run: npm ci --legacy-peer-deps
-      - name: Read-only checks against X Layer mainnet and the live site
-        run: npm run qa -- --ci
-      - name: Upload QA report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: qa-report
-          path: artifacts/qa/
