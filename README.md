@@ -109,12 +109,12 @@ These two are team test trades from a wallet we funded ([0xCd81…C8D5](https://
 
 ![Home](assets/home.jpg)
 
-## Limits
+## Trade-offs and how they're handled
 
-- Per-block and size rules stop crowded early buys. A bot that spreads small buys across fresh wallets and blocks pays less, because it's buying like a normal user.
-- Wallet age isn't used. It can't be read on chain without an indexer.
-- The TapeOut factory is not sealed yet, so its owner can still upgrade how circuits are evaluated. The netlist bytes and SnipeShield's own contracts can't be changed.
-- No third-party audit yet.
+- **Bots that split buys across fresh wallets.** Splitting inside one block trips the crowded signal, and splitting across blocks after the first 5 means buying like a normal user, at a normal price. Launchers who want a stricter rule can tape out their own policy on the SHIELD processor and launch with it. No code changes are needed.
+- **No wallet-age signal.** Wallet age can't be read on chain without an indexer, so the policy relies on signals the contract can prove: timing, size, block crowding and repeat trading.
+- **TapeOut's factory isn't sealed yet,** so its owner can still upgrade how circuits are evaluated. SnipeShield is built so this can't hurt buyers. The 25% cap and the tier table live in SnipeShield's own immutable contract, and any evaluation failure falls back to that cap. The worst case is a capped tax, never a trapped one.
+- **No third-party audit yet.** The contracts are small, have no owner or upgrade path, and have verified source on OKLink. They're covered by 16 tests that run against the real TapeOut factory on a fork of X Layer mainnet.
 
 ## Repository
 
