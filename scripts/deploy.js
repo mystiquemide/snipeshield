@@ -53,7 +53,10 @@ async function main() {
 
   const app = { rpc: process.env.APP_RPC || "https://rpc.xlayer.tech", factory: FACTORY, processor: out.processor,
     transistors: out.transistors, launcher: out.launcher, circuitId: out.circuitId };
-  fs.writeFileSync("app/config.js", "export default " + JSON.stringify(app, null, 2) + ";\n");
+  fs.writeFileSync(
+    process.env.WEB_ENV || "web/.env.production.local",
+    [`VITE_RPC=${app.rpc}`, `VITE_PROCESSOR=${app.processor}`, `VITE_TRANSISTORS=${app.transistors}`, `VITE_LAUNCHER=${app.launcher}`, `VITE_CIRCUIT_ID=${app.circuitId}`].join("\n") + "\n"
+  );
   fs.mkdirSync("deployments", { recursive: true });
   fs.writeFileSync(`deployments/${network.name}.json`, JSON.stringify(out, null, 2));
   console.log(JSON.stringify(out, null, 2));
