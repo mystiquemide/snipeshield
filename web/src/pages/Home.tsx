@@ -58,12 +58,12 @@ function LaunchRows({ launches, block, limit }: { launches: Launch[]; block: num
                 <span className="block text-[20px]">{l.name}</span>
                 <span className="mono text-smoke">{l.symbol}</span>
               </span>
-              <span className={`justify-self-end text-[15px] md:justify-self-start ${left > 0 ? "text-violet" : "text-slate"}`}>
+              <span className={`justify-self-end text-[15px] md:justify-self-start ${left > 0 ? "text-accent" : "text-slate"}`}>
                 {left > 0 ? `Shield on · ${remaining(left)} left` : "Window closed"}
               </span>
               <span className="text-[15px] text-slate">{l.trades.toLocaleString()} trades</span>
               <span className="mono justify-self-end text-graphite md:justify-self-start">{fmtPrice(l.price)} OKB / 1M</span>
-              <span className="hidden text-violet md:block" aria-hidden="true">→</span>
+              <span className="hidden text-accent md:block" aria-hidden="true">→</span>
             </Link>
           </li>
         );
@@ -89,7 +89,7 @@ function Faq() {
         <div key={q} className="rounded-media bg-cloud">
           <button className="flex w-full items-center justify-between gap-6 px-6 py-5 text-left text-[18px]" aria-expanded={open === i} onClick={() => setOpen(open === i ? null : i)}>
             {q}
-            <span className="text-[22px] text-violet" aria-hidden="true">{open === i ? "−" : "+"}</span>
+            <span className="text-[22px] text-accent" aria-hidden="true">{open === i ? "−" : "+"}</span>
           </button>
           {open === i && <p className="px-6 pb-6 text-slate">{a}</p>}
         </div>
@@ -108,7 +108,7 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden bg-obsidian">
         <img src="/img/hero-2400.webp" srcSet="/img/hero-1200.webp 1200w, /img/hero-2400.webp 2400w" sizes="100vw" alt=""
-          className="absolute inset-0 h-full w-full object-cover object-[40%_50%] md:object-[20%_60%]" />
+          className="absolute inset-0 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 bg-black/35 md:bg-black/20" aria-hidden="true" />
         <div className="wrap relative flex min-h-[640px] flex-col justify-end pb-16 pt-32 md:min-h-[720px] md:pb-24">
           <p className="font-mono text-[12px] uppercase tracking-[0.075em] text-white/80">Launch protection on X Layer</p>
@@ -144,7 +144,7 @@ export default function Home() {
             ["03", "Window closes", "After 30 minutes the circuit steps aside and every trade pays a flat 1%."],
           ].map(([n, t, d], i) => (
             <div key={n} className={`border-b border-mist py-8 md:border-b-0 md:py-10 ${i ? "md:border-l md:pl-8" : "md:pr-8"}`}>
-              <p className="mono text-violet">{n}</p>
+              <p className="mono text-accent">{n}</p>
               <h3 className="mt-3 text-[26px]">{t}</h3>
               <p className="mt-2 text-slate">{d}</p>
             </div>

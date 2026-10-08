@@ -86,7 +86,7 @@ export default function Policy() {
               <div className="inline-flex rounded-pill bg-cloud p-1" role="tablist">
                 {([["rules", "Rules"], ["table", "Truth table"], ["gates", "Gates"]] as const).map(([k, t]) => (
                   <button key={k} role="tab" aria-selected={tab === k} onClick={() => setTab(k)}
-                    className={`rounded-pill px-5 py-2 text-[15px] font-medium transition-colors ${tab === k ? "bg-violet text-white" : "text-slate hover:text-ink"}`}>{t}</button>
+                    className={`rounded-pill px-5 py-2 text-[15px] font-medium transition-colors ${tab === k ? "bg-accent text-white" : "text-slate hover:text-ink"}`}>{t}</button>
                 ))}
               </div>
               {isPolicy && <Link className="btn-primary" to={`/launch?processor=${processor}&circuit=${circuit}`}>Launch with this policy</Link>}
@@ -104,9 +104,9 @@ export default function Policy() {
                   <div>
                     <p className="text-slate">Three outputs build the tier (tier = 4 × A + 2 × B + C):</p>
                     <ul className="mt-4 space-y-4 text-[17px]">
-                      <li className="border-b border-mist pb-4"><span className="mono text-violet">A</span> First 5 seconds, or a large trade in a busy block.</li>
-                      <li className="border-b border-mist pb-4"><span className="mono text-violet">B</span> Inside the window, and large, busy, or a sell right after trading.</li>
-                      <li className="border-b border-mist pb-4"><span className="mono text-violet">C</span> Inside the window, and selling or trading again within a minute.</li>
+                      <li className="border-b border-mist pb-4"><span className="mono text-accent">A</span> First 5 seconds, or a large trade in a busy block.</li>
+                      <li className="border-b border-mist pb-4"><span className="mono text-accent">B</span> Inside the window, and large, busy, or a sell right after trading.</li>
+                      <li className="border-b border-mist pb-4"><span className="mono text-accent">C</span> Inside the window, and selling or trading again within a minute.</li>
                     </ul>
                   </div>
                 </div>

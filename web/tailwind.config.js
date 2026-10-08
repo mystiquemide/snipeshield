@@ -4,8 +4,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        violet: { DEFAULT: "#594FF4", tint: "#DAD6F7" },
-        ink: "#1F1F1F",
+        accent: { DEFAULT: "#1F5BFF", hover: "#1849D6", tint: "#DCE5FF" },
+        ink: "#111111",
         graphite: "#333333",
         slate: "#5D5D5D",
         smoke: "#888888",

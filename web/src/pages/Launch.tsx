@@ -115,15 +115,15 @@ export default function Launch() {
             <fieldset>
               <legend className="text-[15px] text-slate">Policy</legend>
               <div className="mt-3 space-y-3">
-                <label className={`flex cursor-pointer items-start gap-3 rounded-media border p-5 ${mode === "default" ? "border-violet bg-violet-tint/40" : "border-mist"}`}>
-                  <input type="radio" className="mt-1 accent-[#594FF4]" checked={mode === "default"} onChange={() => setMode("default")} />
+                <label className={`flex cursor-pointer items-start gap-3 rounded-media border p-5 ${mode === "default" ? "border-accent bg-accent-tint/40" : "border-mist"}`}>
+                  <input type="radio" className="mt-1 accent-[#1F5BFF]" checked={mode === "default"} onChange={() => setMode("default")} />
                   <span>
                     <span className="block text-[17px]">SnipeShield default</span>
                     <span className="block text-[15px] text-slate">Circuit #{CONFIG.circuitId} on the SHIELD processor. <Link className="link" to={`/policy/${CONFIG.processor}/${CONFIG.circuitId}`}>Preview</Link></span>
                   </span>
                 </label>
-                <label className={`flex cursor-pointer items-start gap-3 rounded-media border p-5 ${mode === "custom" ? "border-violet bg-violet-tint/40" : "border-mist"}`}>
-                  <input type="radio" className="mt-1 accent-[#594FF4]" checked={mode === "custom"} onChange={() => setMode("custom")} />
+                <label className={`flex cursor-pointer items-start gap-3 rounded-media border p-5 ${mode === "custom" ? "border-accent bg-accent-tint/40" : "border-mist"}`}>
+                  <input type="radio" className="mt-1 accent-[#1F5BFF]" checked={mode === "custom"} onChange={() => setMode("custom")} />
                   <span className="w-full">
                     <span className="block text-[17px]">Another TapeOut circuit</span>
                     <span className="block text-[15px] text-slate">Any stateless circuit with 6 inputs and 3 outputs.</span>

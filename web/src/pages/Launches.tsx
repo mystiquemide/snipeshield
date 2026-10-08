@@ -27,7 +27,7 @@ export default function Launches() {
           <div className="inline-flex rounded-pill bg-cloud p-1" role="tablist" aria-label="Filter launches">
             {([["all", "All"], ["on", "Shield on"], ["closed", "Window closed"]] as const).map(([k, t]) => (
               <button key={k} role="tab" aria-selected={filter === k} onClick={() => setFilter(k)}
-                className={`rounded-pill px-5 py-2 text-[15px] font-medium transition-colors ${filter === k ? "bg-violet text-white" : "text-slate hover:text-ink"}`}>{t}</button>
+                className={`rounded-pill px-5 py-2 text-[15px] font-medium transition-colors ${filter === k ? "bg-accent text-white" : "text-slate hover:text-ink"}`}>{t}</button>
             ))}
           </div>
           <label className="flex items-center gap-2 text-[15px] text-slate">

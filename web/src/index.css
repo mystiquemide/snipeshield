@@ -5,19 +5,19 @@
 @layer base {
   html { -webkit-text-size-adjust: 100%; }
   body { @apply bg-porcelain text-ink font-sans antialiased; font-size: 17px; line-height: 1.5; }
-  :focus-visible { outline: 2px solid #594FF4; outline-offset: 2px; }
+  :focus-visible { outline: 2px solid #1F5BFF; outline-offset: 2px; }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 }
 
 @layer components {
   .eyebrow { @apply font-mono text-[12px] uppercase tracking-[0.075em] text-slate; }
   .btn { @apply inline-flex items-center justify-center gap-2 rounded-pill px-[22px] py-[13px] text-[15px] font-medium transition-colors duration-200 disabled:cursor-not-allowed; }
-  .btn-primary { @apply btn bg-violet text-white hover:bg-[#4A40E8] disabled:bg-mist disabled:text-ash; }
+  .btn-primary { @apply btn bg-accent text-white hover:bg-accent-hover disabled:bg-mist disabled:text-ash; }
   .btn-secondary { @apply btn bg-cloud text-ink hover:bg-mist disabled:text-ash; }
   .btn-light { @apply btn bg-white text-ink hover:bg-cloud; }
-  .link { @apply text-violet hover:underline underline-offset-4; }
+  .link { @apply text-accent hover:underline underline-offset-4; }
   .wrap { @apply mx-auto w-full max-w-page px-4 md:px-6; }
-  .input { @apply w-full rounded-input border border-mist bg-white px-4 py-3 text-[17px] text-ink outline-none transition-colors placeholder:text-ash focus:border-violet; }
+  .input { @apply w-full rounded-input border border-mist bg-white px-4 py-3 text-[17px] text-ink outline-none transition-colors placeholder:text-ash focus:border-accent; }
   .mono { @apply font-mono text-[13px]; }
   .skeleton { @apply inline-block h-[1em] w-24 rounded bg-mist align-middle; }
 }

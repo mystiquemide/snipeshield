@@ -34,7 +34,7 @@ function StatusPill({ meta, block }: { meta: Launch; block: number | null }) {
   if (block === null) return <span className="skeleton" />;
   const left = meta.windowEnd - block;
   return left > 0 ? (
-    <span className="rounded-pill bg-violet-tint px-4 py-2 text-[14px] font-medium text-violet">Shield on · {remaining(left)} left</span>
+    <span className="rounded-pill bg-accent-tint px-4 py-2 text-[14px] font-medium text-accent">Shield on · {remaining(left)} left</span>
   ) : (
     <span className="rounded-pill bg-cloud px-4 py-2 text-[14px] font-medium text-slate">Window closed · flat 1%</span>
   );
@@ -54,8 +54,8 @@ function PriceChart({ trades }: { trades: TradeRow[] }) {
     <div>
       <svg viewBox={`0 0 ${W} ${H}`} className="h-[180px] w-full" role="img" aria-label={`Price per trade, ${pts.length} trades`}>
         <line x1={P} x2={W - P} y1={H - P} y2={H - P} stroke="#E7E7E7" />
-        <path d={d} fill="none" stroke="#594FF4" strokeWidth="2" strokeLinejoin="round" />
-        {pts.map((v, i) => <circle key={i} cx={x(i)} cy={y(v)} r="2.5" fill="#594FF4" />)}
+        <path d={d} fill="none" stroke="#1F5BFF" strokeWidth="2" strokeLinejoin="round" />
+        {pts.map((v, i) => <circle key={i} cx={x(i)} cy={y(v)} r="2.5" fill="#1F5BFF" />)}
       </svg>
       <div className="mt-2 flex justify-between font-mono text-[12px] text-smoke">
         <span>low {perMillion(min)}</span>
@@ -94,7 +94,7 @@ function TradeTable({ token, meta, trades }: { token: string; meta: Launch; trad
             <tr key={t.index} className="border-b border-mist">
               <td className="mono py-3 pr-4">+{remaining(t.blockNumber - meta.launchBlock) || "0s"}</td>
               <td className="py-3 pr-4">{t.isBuy ? "Buy" : "Sell"}</td>
-              <td className="mono py-3 pr-4"><a className="hover:text-violet" href={addrUrl(t.trader)} target="_blank" rel="noreferrer">{short(t.trader)}</a></td>
+              <td className="mono py-3 pr-4"><a className="hover:text-accent" href={addrUrl(t.trader)} target="_blank" rel="noreferrer">{short(t.trader)}</a></td>
               <td className="mono py-3 pr-4">{t.isBuy ? `${fmtOkb(t.okbAmount)} OKB` : `${fmtTokens(t.tokenAmount)} ${meta.symbol}`}</td>
               <td className={`mono py-3 pr-4 ${tierTone(t.tier)}`}>{t.tier}</td>
               <td className={`mono py-3 pr-4 font-medium ${tierTone(t.tier)}`}>{pct(t.taxBps)}</td>
@@ -189,7 +189,7 @@ function TradePanel({ token, meta, block, onTraded, onQuote }: { token: string; 
       <div className="inline-flex rounded-pill bg-white p-1" role="tablist">
         {(["buy", "sell"] as const).map((s) => (
           <button key={s} role="tab" aria-selected={side === s}
-            className={`rounded-pill px-6 py-2 text-[15px] font-medium transition-colors ${side === s ? "bg-violet text-white" : "text-slate hover:text-ink"}`}
+            className={`rounded-pill px-6 py-2 text-[15px] font-medium transition-colors ${side === s ? "bg-accent text-white" : "text-slate hover:text-ink"}`}
             onClick={() => { setSide(s); setAmount(s === "buy" ? "0.01" : ""); tx.reset(); }}>
             {s === "buy" ? "Buy" : "Sell"}
           </button>
@@ -197,7 +197,7 @@ function TradePanel({ token, meta, block, onTraded, onQuote }: { token: string; 
       </div>
 
       <label className="mt-6 block text-[15px] text-slate" htmlFor="amt">You pay</label>
-      <div className="mt-2 flex items-center gap-3 rounded-input border border-mist bg-white px-4 focus-within:border-violet">
+      <div className="mt-2 flex items-center gap-3 rounded-input border border-mist bg-white px-4 focus-within:border-accent">
         <input id="amt" inputMode="decimal" className="w-full bg-transparent py-3.5 text-[22px] outline-none" value={amount}
           onChange={(e) => { setAmount(e.target.value.replace(",", ".")); tx.reset(); }} placeholder="0.0" aria-describedby="bal" />
         <span className="font-medium text-graphite">{side === "buy" ? "OKB" : meta.symbol}</span>
@@ -223,7 +223,7 @@ function TradePanel({ token, meta, block, onTraded, onQuote }: { token: string; 
           <span className={`text-[28px] font-medium ${quote ? tierTone(quote.tier) : "text-ash"}`}>{quote ? pct(quote.bps) : "0%"}</span>
         </div>
         {quote && <p className="mt-3 text-[15px] text-graphite">{reasonSentence(quote.bits, quote.bps, windowOpen)}</p>}
-        {hint && <p className="mt-1 text-[15px] text-violet">{hint}</p>}
+        {hint && <p className="mt-1 text-[15px] text-accent">{hint}</p>}
         {quoteErr && <p className="mt-2 text-[15px] text-dangertext">{quoteErr}</p>}
         {insufficient && <p className="mt-2 text-[15px] text-dangertext">That's more than your balance.</p>}
       </div>
@@ -245,7 +245,7 @@ function WhyPanel({ meta, bits, tier, bps, windowOpen }: { meta: Launch; bits: n
           return (
             <li key={s.key} className="flex items-center justify-between border-b border-mist py-3 text-[15px]">
               <span className={on ? "text-ink" : "text-slate"}>{s.label}</span>
-              <span className={`mono ${on ? "text-violet" : "text-ash"}`}>{on ? "on" : "off"}</span>
+              <span className={`mono ${on ? "text-accent" : "text-ash"}`}>{on ? "on" : "off"}</span>
             </li>
           );
         })}

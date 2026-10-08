@@ -12,7 +12,7 @@ function Nav({ overHero }: { overHero: boolean }) {
   useEffect(() => setOpen(false), [loc.pathname, loc.hash]);
   const tone = overHero ? "text-white" : "text-ink";
   const item = ({ isActive }: { isActive: boolean }) =>
-    `text-[15px] font-medium transition-colors ${overHero ? "text-white/85 hover:text-white" : isActive ? "text-violet" : "text-graphite hover:text-ink"}`;
+    `text-[15px] font-medium transition-colors ${overHero ? "text-white/85 hover:text-white" : isActive ? "text-accent" : "text-graphite hover:text-ink"}`;
   return (
     <header className={overHero ? "absolute inset-x-0 top-0 z-20" : "border-b border-mist bg-white"}>
       <div className="wrap flex h-[72px] items-center justify-between gap-4">
@@ -95,24 +95,24 @@ function Footer() {
             <div>
               <p className="eyebrow">Product</p>
               <ul className="mt-4 space-y-2.5 text-[15px]">
-                <li><Link to="/launches" className="hover:text-violet">Launches</Link></li>
-                <li><Link to="/launch" className="hover:text-violet">Launch a token</Link></li>
-                {CONFIG.processor && <li><Link to={`/policy/${CONFIG.processor}/${CONFIG.circuitId}`} className="hover:text-violet">Default policy</Link></li>}
+                <li><Link to="/launches" className="hover:text-accent">Launches</Link></li>
+                <li><Link to="/launch" className="hover:text-accent">Launch a token</Link></li>
+                {CONFIG.processor && <li><Link to={`/policy/${CONFIG.processor}/${CONFIG.circuitId}`} className="hover:text-accent">Default policy</Link></li>}
               </ul>
             </div>
             <div>
               <p className="eyebrow">Contracts</p>
               <ul className="mt-4 space-y-2.5 text-[15px]">
                 {contracts.map(([label, a]) => (
-                  <li key={a}><a href={addrUrl(a)} target="_blank" rel="noreferrer" className="hover:text-violet">{label}</a></li>
+                  <li key={a}><a href={addrUrl(a)} target="_blank" rel="noreferrer" className="hover:text-accent">{label}</a></li>
                 ))}
               </ul>
             </div>
             <div>
               <p className="eyebrow">Source</p>
               <ul className="mt-4 space-y-2.5 text-[15px]">
-                <li><a href={CONFIG.repo} target="_blank" rel="noreferrer" className="hover:text-violet">GitHub</a></li>
-                <li><a href="https://www.tapeout.net" target="_blank" rel="noreferrer" className="hover:text-violet">TapeOut</a></li>
+                <li><a href={CONFIG.repo} target="_blank" rel="noreferrer" className="hover:text-accent">GitHub</a></li>
+                <li><a href="https://www.tapeout.net" target="_blank" rel="noreferrer" className="hover:text-accent">TapeOut</a></li>
               </ul>
             </div>
           </div>
@@ -120,9 +120,9 @@ function Footer() {
             <p>Tokens launched here are experimental. Prices move and you can lose what you spend. Nothing here is investment advice.</p>
             <p className="mt-2">
               Photos on Unsplash by{" "}
-              <a className="hover:text-ink" href="https://unsplash.com/photos/a-purple-light-in-the-dark-3jKKdDZQjWs" target="_blank" rel="noreferrer">Milad Fakurian</a>,{" "}
+              <a className="hover:text-ink" href="https://unsplash.com/photos/abstract-blue-and-purple-light-streaks-PG-viUKr_2E" target="_blank" rel="noreferrer">Inigo Concepcion</a>,{" "}
               <a className="hover:text-ink" href="https://unsplash.com/photos/close-up-of-a-computer-processor-with-many-pins-GhLDc9jRKNw" target="_blank" rel="noreferrer">Akshat Sharma</a> and{" "}
-              <a className="hover:text-ink" href="https://unsplash.com/photos/abstract-glowing-purple-energy-lines-on-dark-background-NjNH2Nd7qaE" target="_blank" rel="noreferrer">Marek Pavlík</a>.
+              <a className="hover:text-ink" href="https://unsplash.com/photos/abstract-blue-light-streaks-on-a-dark-background-dOYVMySdXd0" target="_blank" rel="noreferrer">灿雄 邱</a>.
             </p>
           </div>
         </div>
