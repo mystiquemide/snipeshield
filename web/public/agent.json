@@ -1,0 +1,28 @@
+{
+  "name": "SnipeShield",
+  "description": "Fair token launches on X Layer. A public TapeOut NAND circuit sets the launch tax per trade: snipers pay up to 25%, everyone else 1%, and nobody can raise it.",
+  "chain": { "name": "X Layer", "chainId": 196, "rpc": "https://rpc.xlayer.tech", "explorer": "https://www.oklink.com/xlayer" },
+  "contracts": {
+    "launcher": "0x213149A7120F2d417DB5626607257b72687bf812",
+    "processor": "0x1EB66F2b96F8E861b20B2F93b66c99F0ea86276E",
+    "transistors": "0x6733a381b6120d9cB73E1b9B03198DD1407edb33",
+    "defaultPolicyCircuitId": 1,
+    "tapeoutFactory": "0x1f09daefa827f02cbb40967cc91b259763760761"
+  },
+  "beforeYouTrade": {
+    "summary": "Call quoteBuy or quoteSell with your own address. They are free view calls that return the exact tier and tax the contract will charge.",
+    "quoteBuy": "function quoteBuy(address trader, uint256 okbIn) view returns (uint256 tokensOut, uint8 signals, uint8 tier, uint256 taxBps)",
+    "quoteSell": "function quoteSell(address trader, uint256 tokensIn) view returns (uint256 okbOut, uint8 signals, uint8 tier, uint256 taxBps)",
+    "signalBits": ["early (first 5 blocks)", "warm (first 1800 blocks)", "big (over 0.5% of supply)", "crowded (2+ trades this block)", "recent (you traded in the last 60 blocks)", "sell"],
+    "taxTableBps": [100, 300, 500, 800, 1200, 1500, 2000, 2500],
+    "advice": "To pay the base 1%, wait 5 blocks after launch, keep size under 0.5% of supply, avoid crowded blocks and space your trades a minute apart."
+  },
+  "trade": {
+    "buy": "function buy(uint256 minTokensOut) payable",
+    "sell": "function sell(uint256 tokensIn, uint256 minOkbOut)"
+  },
+  "listLaunches": "launcher.tokenCount() and launcher.tokens(i)",
+  "cli": "npx github:mystiquemide/snipeshield quote <token> <okb> --trader <address> --json",
+  "source": "https://github.com/mystiquemide/snipeshield",
+  "app": "https://snipeshield.midelabs.xyz"
+}

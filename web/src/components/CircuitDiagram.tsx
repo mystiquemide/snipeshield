@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { DEPLOY } from "../lib/deployData";
+import { POLICY as DEPLOY } from "../lib/policyData";
 
 const INPUTS = ["early", "warm", "big", "crowded", "recent", "sell"];
 const OUTPUTS = ["C", "B", "A"]; // bit order: o0, o1, o2

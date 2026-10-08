@@ -48,14 +48,14 @@ function TapeOutMark() {
 const ITEMS = [
   { role: "Chain", href: "https://web3.okx.com/xlayer", label: "X Layer", mark: <XLayerMark /> },
   { role: "Circuits", href: "https://www.tapeout.net", label: "TapeOut", mark: <TapeOutMark /> },
-  { role: "Launchpad", href: "https://ignix.bot", label: "IGNIX", mark: <img src="/brands/ignix.svg" alt="" className="h-9 w-auto" /> },
-  { role: "Partner", href: "https://metagents.ai", label: "Metagents", mark: <MetagentsMark /> },
+  { role: "Hackathon host", href: "https://ignix.bot", label: "IGNIX", mark: <img src="/brands/ignix.svg" alt="" className="h-9 w-auto" /> },
+  { role: "Hackathon partner", href: "https://metagents.ai", label: "Metagents", mark: <MetagentsMark /> },
 ];
 
 export function BuiltOn() {
   return (
     <section className="wrap pt-12" aria-labelledby="built-on">
-      <p id="built-on" className="eyebrow">Built on</p>
+      <p id="built-on" className="eyebrow">Built on X Layer and TapeOut, for IGNIX × Metagents</p>
       <ul className="mt-5 grid grid-cols-2 border-y border-mist md:grid-cols-4">
         {ITEMS.map((it, i) => (
           <li key={it.label} className={`border-mist ${i % 2 ? "border-l" : ""} ${i > 1 ? "border-t md:border-t-0" : ""} ${i === 2 ? "md:border-l" : ""}`}>

@@ -6,7 +6,6 @@ import Launches from "./pages/Launches";
 import TokenPage from "./pages/Token";
 import Launch from "./pages/Launch";
 import Policy from "./pages/Policy";
-import Deploy from "./pages/Deploy";
 
 function NotFound() {
   return (
@@ -31,7 +30,6 @@ export default function App() {
           <Route path="/token/:address" element={<TokenPage />} />
           <Route path="/launch" element={<Launch />} />
           <Route path="/policy/:processor/:id" element={<Policy />} />
-          <Route path="/deploy" element={<Deploy />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
