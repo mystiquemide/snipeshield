@@ -28,7 +28,7 @@ contract ShieldToken is ERC20, ReentrancyGuard {
     uint256 public immutable launchBlock;
 
     uint256 public okbReserve; // real OKB backing the curve
-    uint256 public taxOwed;
+    uint256 public taxOwed; // creator share, capped at the base rate
 
     mapping(address => uint256) public lastTradeBlock;
     mapping(uint256 => uint256) public tradesInBlock;
@@ -162,13 +162,16 @@ contract ShieldToken is ERC20, ReentrancyGuard {
         if (msg.value == 0) revert ZeroAmount();
         (uint8 bits, uint8 tier, uint256 bps) = _tax(msg.sender, true, _buyOut(msg.value));
         uint256 taxOkb = (msg.value * bps) / 10_000;
+        uint256 creatorCut = (msg.value * BASE_TAX_BPS) / 10_000;
         uint256 net = msg.value - taxOkb;
 
         tokensOut = _buyOut(net);
         if (tokensOut < minTokensOut || tokensOut == 0) revert Slippage();
 
-        okbReserve += net;
-        taxOwed += taxOkb;
+        // Everything above the base rate stays in the curve and lifts the price for holders,
+        // so a creator sniping their own launch pays the penalty like anyone else.
+        okbReserve += msg.value - creatorCut;
+        taxOwed += creatorCut;
         _record(msg.sender);
         _transfer(address(this), msg.sender, tokensOut);
         emit Trade(msg.sender, true, msg.value, tokensOut, bits, tier, bps, taxOkb);
@@ -179,11 +182,12 @@ contract ShieldToken is ERC20, ReentrancyGuard {
         (uint8 bits, uint8 tier, uint256 bps) = _tax(msg.sender, false, tokensIn);
         uint256 gross = _sellOut(tokensIn);
         uint256 taxOkb = (gross * bps) / 10_000;
+        uint256 creatorCut = (gross * BASE_TAX_BPS) / 10_000;
         okbOut = gross - taxOkb;
         if (okbOut < minOkbOut || okbOut == 0) revert Slippage();
 
-        okbReserve -= gross;
-        taxOwed += taxOkb;
+        okbReserve -= okbOut + creatorCut;
+        taxOwed += creatorCut;
         _record(msg.sender);
         _transfer(msg.sender, address(this), tokensIn);
         emit Trade(msg.sender, false, okbOut, tokensIn, bits, tier, bps, taxOkb);

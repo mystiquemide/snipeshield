@@ -16,6 +16,7 @@ module.exports = {
       chainId: 196,
       hardfork: "shanghai",
       chains: { 196: { hardforkHistory: { shanghai: 0 } } },
+      accounts: process.env.DRY_KEY ? [{ privateKey: process.env.DRY_KEY, balance: "10000000000000000000" }] : undefined,
       forking: process.env.NO_FORK ? undefined : { url: XLAYER_RPC },
     },
     xlayer: { url: XLAYER_RPC, chainId: 196, accounts },

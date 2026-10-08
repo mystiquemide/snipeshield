@@ -170,6 +170,18 @@ describe("SnipeShield on forked X Layer", function () {
     expect(log.args.taxBps).to.equal(2500n);
   });
 
+  it("creator only earns the base rate; the snipe penalty stays in the curve", async () => {
+    const t = await (await ethers.getContractFactory("ShieldLauncher", creator)).deploy(FACTORY).then(async (l) => {
+      const rc = await (await l.launch("C", "C", await cpu.circuits.getAddress(), circuitId)).wait();
+      const ev = rc.logs.map((x) => { try { return l.interface.parseLog(x); } catch { return null; } }).find((e) => e && e.name === "Launched");
+      return ethers.getContractAt("ShieldToken", ev.args.token);
+    });
+    const value = ethers.parseEther("0.01");
+    await (await t.connect(creator).buy(0, { value })).wait();
+    expect(await t.taxOwed()).to.equal(value / 100n);
+    expect(await t.okbReserve()).to.equal(value - value / 100n);
+  });
+
   it("tax never exceeds 25% for any tier", async () => {
     const t = await launch();
     for (let i = 0; i < 8; i++) expect(await t.taxTable(i)).to.be.lte(2500n);
