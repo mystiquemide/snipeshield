@@ -9,7 +9,7 @@ export const CONFIG = {
   transistors: import.meta.env.VITE_TRANSISTORS || "",
   launcher: import.meta.env.VITE_LAUNCHER || "",
   circuitId: Number(import.meta.env.VITE_CIRCUIT_ID || 0),
-  repo: "https://github.com/mystiquemide/tape-out-",
+  repo: "https://github.com/mystiquemide/snipeshield",
 };
 
 export const isDeployed = () => Boolean(CONFIG.launcher && CONFIG.processor);
