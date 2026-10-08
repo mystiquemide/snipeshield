@@ -105,7 +105,7 @@ export default function Home() {
   const deployed = isDeployed();
 
   return (
-    <Layout overHero>
+    <Layout overHero footer>
       {/* Hero */}
       <section className="relative overflow-hidden bg-obsidian">
         <img src="/img/hero-2400.webp" srcSet="/img/hero-1200.webp 1200w, /img/hero-2400.webp 2400w" sizes="100vw" alt=""

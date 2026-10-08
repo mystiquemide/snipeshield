@@ -131,7 +131,7 @@ function Footer() {
   );
 }
 
-export function Layout({ children, overHero = false }: { children: ReactNode; overHero?: boolean }) {
+export function Layout({ children, overHero = false, footer = false }: { children: ReactNode; overHero?: boolean; footer?: boolean }) {
   const loc = useLocation();
   useEffect(() => {
     if (loc.hash) document.getElementById(loc.hash.slice(1))?.scrollIntoView({ behavior: "smooth" });
@@ -144,7 +144,7 @@ export function Layout({ children, overHero = false }: { children: ReactNode; ov
       </div>
       <NetworkStrip />
       <main className="flex-1">{children}</main>
-      <Footer />
+      {footer && <Footer />}
       <InstallSheet />
     </div>
   );
