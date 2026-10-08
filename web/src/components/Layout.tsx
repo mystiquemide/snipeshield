@@ -9,7 +9,13 @@ import { addrUrl } from "../lib/chain";
 function Nav({ overHero }: { overHero: boolean }) {
   const [open, setOpen] = useState(false);
   const loc = useLocation();
-  useEffect(() => setOpen(false), [loc.pathname, loc.hash]);
+  useEffect(() => setOpen(false), [loc.pathname]);
+  useEffect(() => {
+    if (!open) return;
+    const esc = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", esc);
+    return () => document.removeEventListener("keydown", esc);
+  }, [open]);
   const tone = overHero ? "text-white" : "text-ink";
   const item = ({ isActive }: { isActive: boolean }) =>
     `text-[15px] font-medium transition-colors ${overHero ? "text-white/85 hover:text-white" : isActive ? "text-accent" : "text-graphite hover:text-ink"}`;
@@ -22,7 +28,7 @@ function Nav({ overHero }: { overHero: boolean }) {
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
           <NavLink to="/launches" className={item}>Launches</NavLink>
           <NavLink to="/launch" className={item}>Launch a token</NavLink>
-          <Link to="/#how" className={item({ isActive: false })}>How it works</Link>
+          <NavLink to="/how" className={item}>How it works</NavLink>
         </nav>
         <div className="hidden md:block"><WalletButton onDark={overHero} /></div>
         <button className={`md:hidden ${tone} p-2`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
@@ -36,7 +42,7 @@ function Nav({ overHero }: { overHero: boolean }) {
           <div className="wrap flex flex-col gap-1 py-4">
             <Link to="/launches" className="py-3 text-[17px] font-medium">Launches</Link>
             <Link to="/launch" className="py-3 text-[17px] font-medium">Launch a token</Link>
-            <Link to="/#how" className="py-3 text-[17px] font-medium">How it works</Link>
+            <Link to="/how" className="py-3 text-[17px] font-medium">How it works</Link>
             <div className="pt-3"><WalletButton /></div>
           </div>
         </div>
@@ -118,12 +124,6 @@ function Footer() {
           </div>
           <div className="mt-12 border-t border-mist pt-6 text-[14px] text-smoke">
             <p>Tokens launched here are experimental. Prices move and you can lose what you spend. Nothing here is investment advice.</p>
-            <p className="mt-2">
-              Photos on Unsplash by{" "}
-              <a className="hover:text-ink" href="https://unsplash.com/photos/abstract-blue-and-purple-light-streaks-PG-viUKr_2E" target="_blank" rel="noreferrer">Inigo Concepcion</a>,{" "}
-              <a className="hover:text-ink" href="https://unsplash.com/photos/close-up-of-a-computer-processor-with-many-pins-GhLDc9jRKNw" target="_blank" rel="noreferrer">Akshat Sharma</a> and{" "}
-              <a className="hover:text-ink" href="https://unsplash.com/photos/abstract-blue-light-streaks-on-a-dark-background-dOYVMySdXd0" target="_blank" rel="noreferrer">灿雄 邱</a>.
-            </p>
           </div>
         </div>
       </div>
@@ -131,19 +131,30 @@ function Footer() {
   );
 }
 
-export function Layout({ children, overHero = false, footer = false }: { children: ReactNode; overHero?: boolean; footer?: boolean }) {
+export function Layout({ children, title, overHero = false, footer = false }: { children: ReactNode; title?: string; overHero?: boolean; footer?: boolean }) {
   const loc = useLocation();
   useEffect(() => {
-    if (loc.hash) document.getElementById(loc.hash.slice(1))?.scrollIntoView({ behavior: "smooth" });
+    document.title = title ? `${title} · SnipeShield` : "SnipeShield · Fair launches on X Layer";
+  }, [title]);
+  useEffect(() => {
+    if (loc.pathname === "/how") document.getElementById("how")?.scrollIntoView({ behavior: "smooth" });
     else window.scrollTo(0, 0);
-  }, [loc.pathname, loc.hash]);
+  }, [loc.pathname]);
   return (
     <div className="flex min-h-screen flex-col">
+      <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-pill focus:bg-accent focus:px-5 focus:py-3 focus:text-white">Skip to content</a>
       <div className="relative">
         <Nav overHero={overHero} />
       </div>
       <NetworkStrip />
-      <main className="flex-1">{children}</main>
+      {!footer && (
+        <div className="wrap pt-6">
+          <Link to="/" className="inline-flex items-center gap-2 text-[15px] text-slate transition-colors hover:text-ink">
+            <span aria-hidden="true">←</span> Back to home
+          </Link>
+        </div>
+      )}
+      <main id="main" className="flex-1" tabIndex={-1}>{children}</main>
       {footer && <Footer />}
       <InstallSheet />
     </div>
@@ -152,11 +163,14 @@ export function Layout({ children, overHero = false, footer = false }: { childre
 
 export function NotDeployed() {
   return (
-    <div className="wrap py-24">
-      <p className="eyebrow">Not live yet</p>
-      <h1 className="mt-3 text-[36px] leading-tight">SnipeShield contracts aren't deployed on this network yet.</h1>
-      <p className="mt-3 text-slate">Check back shortly, or read the source on GitHub.</p>
-      <a className="btn-primary mt-6" href={CONFIG.repo} target="_blank" rel="noreferrer">View source</a>
+    <div className="wrap py-20">
+      <p className="eyebrow">Going live soon</p>
+      <h1 className="mt-3 max-w-[760px] text-[36px] leading-tight">SnipeShield is being deployed to X Layer mainnet.</h1>
+      <p className="mt-3 max-w-[620px] text-slate">Trading and launches open as soon as the contracts are on chain. Until then you can read how the tax works or check the code.</p>
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Link className="btn-primary" to="/how">See how it works</Link>
+        <a className="btn-secondary" href={CONFIG.repo} target="_blank" rel="noreferrer">Read the code</a>
+      </div>
     </div>
   );
 }
@@ -164,8 +178,8 @@ export function NotDeployed() {
 export function RpcError({ onRetry }: { onRetry: () => void }) {
   return (
     <p className="text-[15px] text-slate" role="alert">
-      Couldn't reach X Layer. Retrying every few seconds.{" "}
-      <button className="link" onClick={onRetry}>Retry now</button>
+      We can't reach X Layer right now. We'll keep trying every few seconds.{" "}
+      <button className="link" onClick={onRetry}>Try now</button>
     </p>
   );
 }

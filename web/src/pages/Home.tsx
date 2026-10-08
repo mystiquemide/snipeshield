@@ -5,6 +5,7 @@ import { CONFIG, isDeployed } from "../lib/config";
 import { TAX_TABLE, fmtOkb, fmtPrice, pct, remaining, tierTone } from "../lib/chain";
 import { useBlock, useLaunches, type Launch } from "../lib/hooks";
 import { BuiltOn } from "../components/BuiltOn";
+import { CircuitDiagram } from "../components/CircuitDiagram";
 
 const TIER_ROWS = [
   "Normal trade, or any trade after the 30 minute window",
@@ -18,7 +19,7 @@ const TIER_ROWS = [
 ];
 
 const FAQ = [
-  ["Can the creator change the tax?", "No. The token contract has no function that changes the policy, the tax table or the 25% cap. The policy is chosen once at launch and stays forever. You can confirm this in the verified source."],
+  ["Can the creator change the tax?", "No. The token contract has no function that changes the policy, the tax table or the 25% cap. The policy is set once at launch and never changes. You can check this in the source on GitHub."],
   ["Where does the snipe tax go?", "The creator only ever receives the base 1%. Everything above that stays inside the token's price curve, which raises the price for everyone holding. A creator who snipes their own launch pays the penalty like anyone else."],
   ["What counts as a sniper?", "Six signals feed the circuit on every trade during the first 30 minutes: the first 5 seconds, the protection window, trades over 0.5% of supply, 2 or more trades in the same block, trading again within a minute, and selling."],
   ["What if the circuit breaks?", "If the circuit call fails for any reason, the trade is charged the top tier, 25%. It never goes above that, because the cap is a constant in the contract."],
@@ -132,7 +133,7 @@ export default function Home() {
         {deployed ? (
           launches.error && !launches.data ? <div className="py-6"><RpcError onRetry={launches.refresh} /></div> : <Stats launches={launches.data} block={block.data} />
         ) : (
-          <p className="py-6 text-slate">Contracts are being deployed. Live numbers appear here as soon as they're on chain.</p>
+          <p className="py-6 text-slate">Live numbers appear here the moment the contracts are on X Layer mainnet.</p>
         )}
       </section>
 
@@ -177,8 +178,7 @@ export default function Home() {
 
       {/* Circuit */}
       <section className="wrap grid items-center gap-12 py-24 md:grid-cols-2">
-        <img src="/img/circuit-1200.webp" srcSet="/img/circuit-1200.webp 1200w, /img/circuit-2400.webp 2400w" sizes="(min-width: 768px) 50vw, 100vw"
-          alt="Close-up of a processor's pin array" className="aspect-[4/3] w-full rounded-panel border border-mist object-cover" loading="lazy" />
+        <div className="overflow-hidden rounded-panel"><CircuitDiagram /></div>
         <div>
           <p className="eyebrow">The circuit</p>
           <h2 className="mt-3 text-[36px] leading-[1.1]">18 NAND gates decide the tier.</h2>
@@ -220,13 +220,15 @@ export default function Home() {
 
       {/* CTA band */}
       <section className="wrap pb-24">
-        <div className="relative overflow-hidden rounded-panel bg-obsidian">
-          <img src="/img/cta-2400.webp" srcSet="/img/cta-1200.webp 1200w, /img/cta-2400.webp 2400w" sizes="100vw" alt="" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-black/30" aria-hidden="true" />
-          <div className="relative flex flex-col items-start gap-6 px-8 py-20 md:px-16 md:py-28">
-            <h2 className="max-w-[640px] text-[40px] leading-[1.05] text-white md:text-[56px]">Launch with the rules in the open.</h2>
+        <div className="overflow-hidden rounded-panel bg-accent px-6 pt-16 text-center md:px-16 md:pt-24">
+          <p className="font-mono text-[12px] uppercase tracking-[0.075em] text-white/75">Ready when you are</p>
+          <h2 className="mx-auto mt-4 max-w-[720px] text-[40px] leading-[1.05] text-white md:text-[56px]">Launch with the rules in the open.</h2>
+          <p className="mx-auto mt-4 max-w-[560px] text-[18px] text-white/85">Pick a policy, name your token and it's live in one transaction. Buyers see exactly what they'll pay before they sign.</p>
+          <div className="mt-8 flex justify-center">
             <Link to="/launch" className="btn-light">Launch a token</Link>
           </div>
+          <img src="/img/product-truth-table.webp" alt="SnipeShield policy inspector showing the rows the circuit charges 20%, read live from X Layer"
+            className="mx-auto mt-12 w-full max-w-[920px] rounded-t-media border border-b-0 border-white/30 bg-white" />
         </div>
       </section>
     </Layout>

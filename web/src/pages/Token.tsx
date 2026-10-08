@@ -161,7 +161,7 @@ function TradePanel({ token, meta, block, onTraded, onQuote }: { token: string; 
         const best = tiers.filter((o) => o.tier < q.tier).sort((a, b) => a.tier - b.tier)[0];
         setHint(best ? `To pay ${pct(TAX_TABLE[best.tier])} instead, ${best.text}.` : null);
       })
-      .catch(() => { if (my === seq.current) { setQuote(null); setQuoteErr("Couldn't get a quote from X Layer. Retrying."); } });
+      .catch(() => { if (my === seq.current) { setQuote(null); setQuoteErr("We can't get a price from X Layer right now. Retrying in a few seconds."); } });
   }, [amount, side, w.account, token, block, windowOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const insufficient = balance !== null && wei !== null && wei > balance;
@@ -203,10 +203,10 @@ function TradePanel({ token, meta, block, onTraded, onQuote }: { token: string; 
         <span className="font-medium text-graphite">{side === "buy" ? "OKB" : meta.symbol}</span>
       </div>
       <div id="bal" className="mt-2 flex items-center justify-between text-[14px] text-smoke">
-        <span>{balance !== null ? `Balance ${side === "buy" ? fmtOkb(balance) + " OKB" : fmtTokens(balance) + " " + meta.symbol}` : w.account ? "Loading balance…" : "Connect to see your balance"}</span>
+        <span>{balance !== null ? `Balance ${side === "buy" ? fmtOkb(balance) + " OKB" : fmtTokens(balance) + " " + meta.symbol}` : w.account ? "Loading balance…" : "Connect your wallet to see your balance"}</span>
         {balance !== null && balance > 0n && (
           <button className="link text-[14px]" onClick={() => setAmount(formatEther(side === "buy" ? (balance * 95n) / 100n : balance))}>
-            {side === "buy" ? "Use 95%" : "Max"}
+            Max
           </button>
         )}
       </div>
@@ -225,11 +225,11 @@ function TradePanel({ token, meta, block, onTraded, onQuote }: { token: string; 
         {quote && <p className="mt-3 text-[15px] text-graphite">{reasonSentence(quote.bits, quote.bps, windowOpen)}</p>}
         {hint && <p className="mt-1 text-[15px] text-accent">{hint}</p>}
         {quoteErr && <p className="mt-2 text-[15px] text-dangertext">{quoteErr}</p>}
-        {insufficient && <p className="mt-2 text-[15px] text-dangertext">That's more than your balance.</p>}
+        {insufficient && <p className="mt-2 text-[15px] text-dangertext">That's more than you have. Lower the amount or tap Max.</p>}
       </div>
 
       <button className="btn-primary mt-6 w-full !py-4 text-[17px]" disabled={Boolean(disabled)} onClick={submit}>{label}</button>
-      <p className="mt-3 text-center text-[13px] text-smoke">3% slippage protection. The tax shown is what the contract charges.</p>
+      <p className="mt-3 text-center text-[13px] text-smoke">The tax shown is exactly what the contract charges. Max on buys keeps 5% of your OKB for gas. Trades cancel if the price moves more than 3%.</p>
       <div className="mt-3"><TxStatusLine status={tx.status} doneText={side === "buy" ? "Bought" : "Sold"} /></div>
     </div>
   );
@@ -313,16 +313,16 @@ export default function TokenPage() {
     if (!valid || (m && !m.symbol))
       return (
         <div className="wrap py-24">
-          <h1 className="text-[36px]">This isn't a SnipeShield launch.</h1>
+          <h1 className="text-[36px]">This address isn't a SnipeShield launch.</h1>
+          <p className="mt-3 text-slate">Check the link, or find the token in the list of launches.</p>
           <Link className="btn-primary mt-6" to="/launches">See all launches</Link>
         </div>
       );
     if (!m)
       return <div className="wrap py-16">{meta.error ? <RpcError onRetry={meta.refresh} /> : <p className="text-slate">Reading the launch from X Layer…</p>}</div>;
     return (
-      <div className="wrap py-10 md:py-14">
-        <Link to="/launches" className="text-[15px] text-slate hover:text-ink">← All launches</Link>
-        <div className="mt-6 flex flex-wrap items-end justify-between gap-4">
+      <div className="wrap py-8 md:py-10">
+        <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="eyebrow">{m.symbol}</p>
             <h1 className="mt-2 text-[40px] leading-[1.05] md:text-[56px]">{m.name}</h1>
@@ -375,5 +375,5 @@ export default function TokenPage() {
     );
   }, [m, meta.error, valid, address, block.data, trades.data, trades.error, preview, live, windowOpen, copied]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <Layout>{body}</Layout>;
+  return <Layout title={m?.symbol ? `${m.symbol} · ${m.name}` : "Launch"}>{body}</Layout>;
 }

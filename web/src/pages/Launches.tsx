@@ -11,7 +11,7 @@ export default function Launches() {
   const block = useBlock();
   const [filter, setFilter] = useState<Filter>("all");
   const [sort, setSort] = useState<"new" | "trades">("new");
-  if (!isDeployed()) return <Layout><NotDeployed /></Layout>;
+  if (!isDeployed()) return <Layout title="Launches"><NotDeployed /></Layout>;
 
   const all = launches.data ?? [];
   const b = block.data ?? 0;
@@ -19,7 +19,7 @@ export default function Launches() {
   if (sort === "trades") list = [...list].sort((x, y) => y.trades - x.trades);
 
   return (
-    <Layout>
+    <Layout title="Launches">
       <section className="wrap py-14">
         <p className="eyebrow">Launches</p>
         <h1 className="mt-3 text-[40px] leading-[1.05] md:text-[56px]">Every shielded launch on X Layer.</h1>

@@ -94,12 +94,13 @@ export function errorText(e: unknown): string {
   const err = e as { code?: string | number; shortMessage?: string; message?: string; info?: { error?: { code?: number } }; revert?: { name?: string } };
   if (err?.code === "ACTION_REJECTED" || err?.code === 4001 || err?.info?.error?.code === 4001) return "You cancelled in your wallet.";
   const name = err?.revert?.name;
-  if (name === "Slippage") return "Price moved before your trade landed. Try again.";
+  if (name === "Slippage") return "The price moved before your trade landed, so it was cancelled to protect you. Try again.";
   if (name === "NotTapeOutProcessor") return "That address isn't a TapeOut processor.";
   if (name === "BadPolicyShape") return "That circuit isn't a policy. It needs 6 inputs, 3 outputs and no memory.";
-  if (name === "NotCreator") return "Only the creator can withdraw.";
+  if (name === "NotCreator") return "Only the wallet that launched this token can withdraw its earnings.";
   if (name === "ZeroAmount") return "Enter an amount above zero.";
-  const msg = err?.shortMessage || err?.message || "Something went wrong.";
-  if (/insufficient funds/i.test(msg)) return "Not enough OKB in your wallet for this trade and gas.";
+  const msg = err?.shortMessage || err?.message || "That didn't go through. Check your wallet for details and try again.";
+  if (/insufficient funds/i.test(msg)) return "You don't have enough OKB for this amount plus gas. Lower the amount or add OKB on X Layer.";
+  if (/user rejected|denied/i.test(msg)) return "You cancelled in your wallet.";
   return msg.length > 160 ? msg.slice(0, 160) + "…" : msg;
 }

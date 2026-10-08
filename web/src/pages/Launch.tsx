@@ -36,7 +36,7 @@ export default function Launch() {
       return;
     }
     let alive = true;
-    setCheck({ state: "checking", text: "Checking the circuit on X Layer…" });
+    setCheck({ state: "checking", text: "Checking this circuit on X Layer…" });
     (async () => {
       const f = new Contract(CONFIG.factory, FACTORY_ABI, provider);
       if (!(await f.isCPU(processor))) return { state: "bad", text: "That address isn't a TapeOut processor." } as Check;
@@ -48,11 +48,11 @@ export default function Launch() {
       } catch {
         return { state: "bad", text: `There's no circuit #${circuit} on that processor.` } as Check;
       }
-    })().then((c) => alive && setCheck(c)).catch(() => alive && setCheck({ state: "bad", text: "Couldn't reach X Layer to check the circuit. Try again." }));
+    })().then((c) => alive && setCheck(c)).catch(() => alive && setCheck({ state: "bad", text: "We can't reach X Layer to check this circuit. Try again in a moment." }));
     return () => { alive = false; };
   }, [processor, circuit, mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!isDeployed()) return <Layout><NotDeployed /></Layout>;
+  if (!isDeployed()) return <Layout title="Launch a token"><NotDeployed /></Layout>;
 
   const sym = symbol.toUpperCase().replace(/[^A-Z0-9]/g, "");
   const formOk = name.trim().length >= 2 && name.trim().length <= 32 && sym.length >= 2 && sym.length <= 8 && check.state === "ok";
@@ -72,7 +72,7 @@ export default function Launch() {
   if (created) {
     const url = `${window.location.origin}/token/${created}`;
     return (
-      <Layout>
+      <Layout title="Launch a token">
         <section className="wrap py-20">
           <p className="eyebrow">Launched</p>
           <h1 className="mt-3 text-[40px] leading-[1.05] md:text-[56px]">{sym} is live. The 30 minute window has started.</h1>
@@ -94,7 +94,7 @@ export default function Launch() {
   else if (!w.chainOk) cta = "Switch to X Layer";
 
   return (
-    <Layout>
+    <Layout title="Launch a token">
       <section className="wrap grid gap-12 py-14 lg:grid-cols-[1.1fr_0.9fr]">
         <div>
           <p className="eyebrow">Launch a token</p>
@@ -142,6 +142,11 @@ export default function Launch() {
             </fieldset>
 
             <button type="submit" className="btn-primary w-full !py-4 text-[17px] sm:w-auto" disabled={tx.busy || (w.account !== null && w.chainOk && !formOk)}>{cta}</button>
+            {w.account && w.chainOk && !formOk && check.state !== "checking" && (
+              <p className="text-[15px] text-slate">
+                {name.trim().length < 2 ? "Add a name to continue." : sym.length < 2 ? "Add a symbol to continue." : check.state !== "ok" ? "Pick a valid policy to continue." : ""}
+              </p>
+            )}
             <TxStatusLine status={tx.status} doneText="Launched" />
           </form>
         </div>
@@ -166,7 +171,7 @@ export default function Launch() {
             <p className="mt-3 text-slate">Policy: circuit #{circuit} on <span className="mono">{processor.slice(0, 10)}…</span>. This can't be changed after launch. The 30 minute window starts the moment it lands.</p>
             <div className="mt-6 flex flex-col gap-3">
               <button className="btn-primary" disabled={tx.busy} onClick={doLaunch}>{tx.status.kind === "confirm" ? "Confirm in wallet" : tx.status.kind === "pending" ? "Waiting for block…" : "Confirm launch"}</button>
-              <button className="btn-secondary" disabled={tx.busy} onClick={() => setConfirming(false)}>Go back</button>
+              <button className="btn-secondary" disabled={tx.busy} onClick={() => setConfirming(false)}>Edit details</button>
             </div>
             <div className="mt-3"><TxStatusLine status={tx.status} /></div>
           </div>

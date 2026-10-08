@@ -71,7 +71,7 @@ export default function Deploy() {
 
   const done = Boolean(s.launcherTx);
   return (
-    <Layout>
+    <Layout title="Deploy">
       <section className="wrap max-w-[760px] py-14">
         <p className="eyebrow">Operator</p>
         <h1 className="mt-3 text-[40px] leading-[1.05]">Deploy SnipeShield to X Layer</h1>
@@ -81,7 +81,7 @@ export default function Deploy() {
             <li key={k} className="flex flex-wrap items-center justify-between gap-3 border-b border-mist py-4">
               <span><span className="mono mr-3 text-smoke">0{i + 1}</span>{t}</span>
               {s[k] ? <a className="link mono" href={txUrl(s[k])} target="_blank" rel="noreferrer">{s[k].slice(0, 10)}…</a>
-                : busy === k ? <span className="text-accent">Confirm in wallet…</span> : <span className="text-smoke">Not started</span>}
+                : busy === k ? <span className="text-accent">Confirm in wallet…</span> : <span className="text-smoke">Waiting</span>}
             </li>
           ))}
         </ol>

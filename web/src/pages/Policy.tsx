@@ -41,7 +41,7 @@ export default function Policy() {
 
   if (!valid || err === "missing")
     return (
-      <Layout>
+      <Layout title={`Policy #${id}`}>
         <div className="wrap py-24">
           <h1 className="text-[36px] leading-tight">{valid ? `There's no circuit #${circuit} on this processor.` : "That isn't a valid policy link."}</h1>
           <Link className="btn-primary mt-6" to="/launches">See launches</Link>
@@ -68,7 +68,7 @@ export default function Policy() {
   }
 
   return (
-    <Layout>
+    <Layout title={`Policy #${id}`}>
       <section className="wrap py-14">
         <p className="eyebrow">Policy</p>
         <h1 className="mt-3 text-[40px] leading-[1.05] md:text-[56px]">Circuit #{circuit}{isDefault ? ", SnipeShield default" : ""}</h1>
