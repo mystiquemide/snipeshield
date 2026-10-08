@@ -6,6 +6,7 @@ import { TAX_TABLE, fmtOkb, fmtPrice, pct, remaining, tierTone } from "../lib/ch
 import { useBlock, useLaunches, type Launch } from "../lib/hooks";
 import { BuiltOn } from "../components/BuiltOn";
 import { CircuitDiagram } from "../components/CircuitDiagram";
+import { Odometer, useReveal } from "../components/Motion";
 
 const TIER_ROWS = [
   "Normal trade, or any trade after the 30 minute window",
@@ -41,7 +42,7 @@ function Stats({ launches, block }: { launches: Launch[] | null; block: number |
       {items.map(([k, v], i) => (
         <div key={k} className={`py-6 ${i % 2 ? "pl-6" : ""} md:pl-6 ${i ? "md:border-l" : "md:pl-0"} border-mist`}>
           <p className="text-[14px] text-smoke">{k}</p>
-          <p className="mt-1 text-[26px] leading-tight md:text-[36px]">{v ?? <span className="skeleton h-8" />}</p>
+          <p className="mt-1 text-[26px] leading-tight md:text-[36px]">{v !== null ? <Odometer value={v} /> : <span className="skeleton h-8" />}</p>
         </div>
       ))}
     </div>
@@ -104,6 +105,7 @@ export default function Home() {
   const launches = useLaunches();
   const block = useBlock();
   const deployed = isDeployed();
+  useReveal([launches.data === null]);
 
   return (
     <Layout overHero footer>
@@ -113,22 +115,27 @@ export default function Home() {
           className="absolute inset-0 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 bg-black/35 md:bg-black/20" aria-hidden="true" />
         <div className="wrap relative flex min-h-[640px] flex-col justify-end pb-16 pt-32 md:min-h-[720px] md:pb-24">
-          <p className="font-mono text-[12px] uppercase tracking-[0.075em] text-white/80">Launch protection on X Layer</p>
-          <h1 className="mt-4 max-w-[860px] text-[48px] leading-[1.05] text-white md:text-[72px]">Fair launches, enforced by a circuit.</h1>
-          <p className="mt-5 max-w-[620px] text-[18px] text-white/85 md:text-[20px]">
+          <p className="fade-up font-mono text-[12px] uppercase tracking-[0.075em] text-white/80">Launch protection on X Layer</p>
+          <h1 className="fade-up delay-1 mt-4 max-w-[860px] text-[48px] leading-[1.05] text-white md:text-[72px]">Fair launches, enforced by a circuit.</h1>
+          <p className="fade-up delay-2 mt-5 max-w-[620px] text-[18px] text-white/85 md:text-[20px]">
             Bots that buy in the first seconds pay up to 25%. Everyone else pays 1%. Nobody can raise it, not even the creator.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="fade-up delay-3 mt-8 flex flex-wrap gap-3">
             <Link to="/launches" className="btn-primary">Explore launches</Link>
             <Link to="/launch" className="btn-light">Launch a token</Link>
           </div>
+          <p className="fade-up delay-4 mt-8 flex items-center gap-3 text-[15px] text-white/85">
+            <span className="live-dot" aria-hidden="true" />
+            Live on X Layer mainnet · block{" "}
+            {block.data !== null ? <Odometer value={block.data.toLocaleString("en-US")} className="font-mono text-white" /> : <span className="font-mono">…</span>}
+          </p>
         </div>
       </section>
 
       <BuiltOn />
 
       {/* Live stats */}
-      <section className="wrap pt-12">
+      <section className="reveal wrap pt-12">
         <p className="eyebrow">Live on X Layer mainnet</p>
         {deployed ? (
           launches.error && !launches.data ? <div className="py-6"><RpcError onRetry={launches.refresh} /></div> : <Stats launches={launches.data} block={block.data} />
@@ -138,7 +145,7 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section id="how" className="wrap scroll-mt-24 py-24">
+      <section id="how" className="reveal wrap scroll-mt-24 py-24">
         <p className="eyebrow">How it works</p>
         <h2 className="mt-3 max-w-[760px] text-[36px] leading-[1.1]">The tax rule runs on chain, in the open, on every trade.</h2>
         <div className="mt-12 grid border-t border-mist md:grid-cols-3">
@@ -157,7 +164,7 @@ export default function Home() {
       </section>
 
       {/* Tax table */}
-      <section className="bg-cloud py-24">
+      <section className="reveal bg-cloud py-24">
         <div className="wrap grid gap-12 md:grid-cols-[0.9fr_1.1fr]">
           <div>
             <p className="eyebrow">What you pay</p>
@@ -177,7 +184,7 @@ export default function Home() {
       </section>
 
       {/* Circuit */}
-      <section className="wrap grid items-center gap-12 py-24 md:grid-cols-2">
+      <section className="reveal wrap grid items-center gap-12 py-24 md:grid-cols-2">
         <div className="overflow-hidden rounded-panel"><CircuitDiagram /></div>
         <div>
           <p className="eyebrow">The circuit</p>
@@ -194,7 +201,7 @@ export default function Home() {
       </section>
 
       {/* Live launches */}
-      <section className="wrap pb-24">
+      <section className="reveal wrap pb-24">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="eyebrow">Live launches</p>
@@ -210,7 +217,7 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="wrap grid gap-10 pb-24 md:grid-cols-[0.8fr_1.2fr]">
+      <section className="reveal wrap grid gap-10 pb-24 md:grid-cols-[0.8fr_1.2fr]">
         <div>
           <p className="eyebrow">Questions</p>
           <h2 className="mt-3 text-[36px] leading-[1.1]">What people ask before they buy</h2>
@@ -219,7 +226,7 @@ export default function Home() {
       </section>
 
       {/* CTA band */}
-      <section className="wrap pb-24">
+      <section className="reveal wrap pb-24">
         <div className="overflow-hidden rounded-panel bg-accent px-6 pt-16 text-center md:px-16 md:pt-24">
           <p className="font-mono text-[12px] uppercase tracking-[0.075em] text-white/75">Ready when you are</p>
           <h2 className="mx-auto mt-4 max-w-[720px] text-[40px] leading-[1.05] text-white md:text-[56px]">Launch with the rules in the open.</h2>

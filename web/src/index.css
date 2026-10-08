@@ -21,3 +21,24 @@
   .mono { @apply font-mono text-[13px]; }
   .skeleton { @apply inline-block h-[1em] w-24 rounded bg-mist align-middle; }
 }
+
+/* Motion, modelled on aave.com: fade-up entrances, rolling digits, live pulse. Content stays visible without JS. */
+@layer utilities {
+  @keyframes fade-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes live-pulse { 0% { transform: scale(1); opacity: .55; } 70% { transform: scale(2.6); opacity: 0; } 100% { opacity: 0; } }
+  .fade-up { animation: fade-up .8s cubic-bezier(.2,.7,.2,1) both; }
+  .delay-1 { animation-delay: .08s; } .delay-2 { animation-delay: .18s; } .delay-3 { animation-delay: .3s; } .delay-4 { animation-delay: .44s; }
+  .live-dot { position: relative; display: inline-block; width: 8px; height: 8px; border-radius: 999px; background: #3DDC97; }
+  .live-dot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: inherit; animation: live-pulse 1.8s ease-out infinite; }
+  .js-reveal .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+  .js-reveal .reveal.is-visible { opacity: 1; transform: none; }
+  .odo { display: inline-flex; overflow: hidden; line-height: 1.15; vertical-align: bottom; }
+  .odo-col { display: inline-block; height: 1.15em; }
+  .odo-strip { display: flex; flex-direction: column; transition: transform .7s cubic-bezier(.2,.7,.2,1); }
+  .odo-strip > span { height: 1.15em; }
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up, .live-dot::after { animation: none !important; }
+    .js-reveal .reveal { opacity: 1 !important; transform: none !important; }
+    .odo-strip { transition: none !important; }
+  }
+}
