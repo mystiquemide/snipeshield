@@ -17,6 +17,7 @@ function Nav({ overHero }: { overHero: boolean }) {
     return () => document.removeEventListener("keydown", esc);
   }, [open]);
   const tone = overHero ? "text-white" : "text-ink";
+  const onLanding = loc.pathname === "/" || loc.pathname === "/how";
   const item = ({ isActive }: { isActive: boolean }) =>
     `text-[15px] font-medium transition-colors ${overHero ? "text-white/85 hover:text-white" : isActive ? "text-accent" : "text-graphite hover:text-ink"}`;
   return (
@@ -28,7 +29,7 @@ function Nav({ overHero }: { overHero: boolean }) {
         <nav className="hidden items-center gap-8 md:flex" aria-label="Main">
           <NavLink to="/launches" className={item}>Launches</NavLink>
           <NavLink to="/launch" className={item}>Launch a token</NavLink>
-          <NavLink to="/how" className={item}>How it works</NavLink>
+          {onLanding && <NavLink to="/how" className={item}>How it works</NavLink>}
         </nav>
         <div className="hidden md:block"><WalletButton onDark={overHero} /></div>
         <button className={`md:hidden ${tone} p-2`} aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
@@ -42,7 +43,7 @@ function Nav({ overHero }: { overHero: boolean }) {
           <div className="wrap flex flex-col gap-1 py-4">
             <Link to="/launches" className="py-3 text-[17px] font-medium">Launches</Link>
             <Link to="/launch" className="py-3 text-[17px] font-medium">Launch a token</Link>
-            <Link to="/how" className="py-3 text-[17px] font-medium">How it works</Link>
+            {onLanding && <Link to="/how" className="py-3 text-[17px] font-medium">How it works</Link>}
             <div className="pt-3"><WalletButton /></div>
           </div>
         </div>
