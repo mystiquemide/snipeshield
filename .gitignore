@@ -6,3 +6,4 @@ artifacts
 typechain-types
 coverage
 docs/
+deployments/

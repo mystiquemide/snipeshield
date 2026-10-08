@@ -19,6 +19,7 @@ module.exports = {
       accounts: process.env.DRY_KEY ? [{ privateKey: process.env.DRY_KEY, balance: "10000000000000000000" }] : undefined,
       forking: process.env.NO_FORK ? undefined : { url: XLAYER_RPC },
     },
+    localhost: { url: "http://127.0.0.1:8545", chainId: 196 },
     xlayer: { url: XLAYER_RPC, chainId: 196, accounts },
   },
 };

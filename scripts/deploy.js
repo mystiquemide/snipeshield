@@ -51,8 +51,11 @@ async function main() {
   out.launcher = await launcher.getAddress();
   console.log("launcher", out.launcher);
 
+  const app = { rpc: process.env.APP_RPC || "https://rpc.xlayer.tech", factory: FACTORY, processor: out.processor,
+    transistors: out.transistors, launcher: out.launcher, circuitId: out.circuitId };
+  fs.writeFileSync("app/config.js", "export default " + JSON.stringify(app, null, 2) + ";\n");
   fs.mkdirSync("deployments", { recursive: true });
-  fs.writeFileSync("deployments/xlayer.json", JSON.stringify(out, null, 2));
+  fs.writeFileSync(`deployments/${network.name}.json`, JSON.stringify(out, null, 2));
   console.log(JSON.stringify(out, null, 2));
 }
 
