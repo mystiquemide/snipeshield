@@ -12,10 +12,22 @@ Fair token launches on X Layer. Bots that buy in the first seconds pay up to 25%
 | SHIELD transistors (ERC-1155) | [0x6733a381b6120d9cB73E1b9B03198DD1407edb33](https://www.oklink.com/xlayer/address/0x6733a381b6120d9cB73E1b9B03198DD1407edb33) |
 | ShieldLauncher (verified) | [0x213149A7120F2d417DB5626607257b72687bf812](https://www.oklink.com/xlayer/address/0x213149A7120F2d417DB5626607257b72687bf812) |
 | Default policy | Circuit #1, taped out in [0x290d6858…6709](https://www.oklink.com/xlayer/tx/0x290d685887917b3fb3be3e6c5832a5cc0ec8d6223c99191228c2fab12aae6709) |
+| SnipeShield Genesis (SHIELD) token, verified | [0xdC1F779B4024ff30C71BEB1D2C3913795946D712](https://snipeshield.midelabs.xyz/token/0xdC1F779B4024ff30C71BEB1D2C3913795946D712) |
 | Deployer | [0x76C8B3A5ebCD1622cD232fd39F0B3e91DBDf990D](https://www.oklink.com/xlayer/address/0x76C8B3A5ebCD1622cD232fd39F0B3e91DBDf990D) |
 | TapeOut factory | [0x1f09daefa827f02cbb40967cc91b259763760761](https://www.oklink.com/xlayer/address/0x1f09daefa827f02cbb40967cc91b259763760761) |
 
 **SHIELD transistors:** fixed supply of 1,000,000, priced at 0.00001 OKB each, with no extra cap beyond the supply. The price is low because the processor exists to host policies: anyone can mint transistors and tape out their own launch policy on it.
+
+### The tax rule working on mainnet
+
+Two buys of SnipeShield Genesis, same wallet, same size (0.0015 OKB):
+
+| Buy | Blocks after launch | Signals | Tier | Tax | Tx |
+|---|---|---|---|---|---|
+| Early | 4 | first 5 seconds, inside window | 4 | 12% | [0xaf3b…be87](https://www.oklink.com/xlayer/tx/0xaf3b102d3003cb44178b72110405066939c9a59e08abf7da07f92fa2a829be87) |
+| Later | 83 | inside window | 0 | 1% | [0x0e85…5c95](https://www.oklink.com/xlayer/tx/0x0e8563bc607bc76da68f0be91419b00478a5adb94a0801b737c1fe08c8de5c95) |
+
+These two are team test trades from a wallet we funded ([0xCd81…C8D5](https://www.oklink.com/xlayer/address/0xCd81069d7a3687d64605E51d654950cDC6a6C8D5)), made to show the policy firing on a real launch. They are not counted as user activity.
 
 ## The problem
 
