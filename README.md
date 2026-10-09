@@ -1,6 +1,6 @@
 # SnipeShield
 
-**Live app:** https://snipeshield.midelabs.xyz
+**Live app:** https://snipeshield.midelabs.xyz · **Launch post:** [on X](https://x.com/MystiqueMide/status/2108394467338129879)
 
 [![Watch the SnipeShield demo](assets/demo-video.jpg)](https://youtu.be/rvccidP0ncg)
 
