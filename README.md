@@ -137,7 +137,7 @@ cd web && npm install && npm run dev
 
 ## Built on
 
-[X Layer](https://web3.okx.com/xlayer) for settlement and [TapeOut](https://www.tapeout.net) for policy circuits. Part of the [IGNIX](https://ignix.bot) launch ecosystem, with an agent manifest at [`/agent.json`](https://snipeshield.midelabs.xyz/agent.json) for [Metagents](https://metagents.ai) agents.
+[X Layer](https://web3.okx.com/xlayer) for settlement and [TapeOut](https://www.tapeout.net) for policy circuits. Part of the [IGNIX](https://ignix.bot) launch ecosystem.
 
 ## License
 
