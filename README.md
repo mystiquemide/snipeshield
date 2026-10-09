@@ -2,7 +2,7 @@
 
 **Live app:** https://snipeshield.midelabs.xyz
 
-**Demo video:** [Watch on YouTube](https://youtu.be/rvccidP0ncg)
+[![Watch the SnipeShield demo](assets/demo-video.jpg)](https://youtu.be/rvccidP0ncg)
 
 Fair token launches on X Layer. Bots that buy in the first seconds pay up to 25%, everyone else pays 1%, and nobody can raise it, not even the creator. The tax rule is a public NAND circuit taped out on [TapeOut](https://www.tapeout.net).
 
